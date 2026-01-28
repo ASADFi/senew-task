@@ -1,0 +1,13 @@
+node_modules
+npm-debug.log
+.env
+.git
+.gitignore
+README.md
+QUICK_START.md
+postman_collection.json
+api-tests.http
+.DS_Store
+coverage
+.vscode
+.idea

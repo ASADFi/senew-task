@@ -1,0 +1,221 @@
+### Flash Deal API - REST Client Tests
+### Use with VS Code REST Client extension
+### Variables
+@baseUrl = http://localhost:3000/api
+@userId = user123
+@productId = REPLACE_WITH_ACTUAL_PRODUCT_ID
+@reservationId = REPLACE_WITH_ACTUAL_RESERVATION_ID
+@orderId = REPLACE_WITH_ACTUAL_ORDER_ID
+
+###############################################
+# Health Check
+###############################################
+
+### Health Check
+GET {{baseUrl}}/health
+
+###############################################
+# Products
+###############################################
+
+### Create Product
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "iPhone 15 Pro Max",
+  "sku": "IPHONE15PROMAX",
+  "description": "Latest flagship iPhone with titanium design",
+  "price": 1199.99,
+  "totalStock": 200
+}
+
+### Get All Products
+GET {{baseUrl}}/products
+
+### Get Product by ID
+GET {{baseUrl}}/products/{{productId}}
+
+### Get Product Status (Real-time)
+GET {{baseUrl}}/products/{{productId}}/status
+
+### Update Product
+PUT {{baseUrl}}/products/{{productId}}
+Content-Type: application/json
+
+{
+  "name": "iPhone 15 Pro Max (Flash Sale)",
+  "price": 1099.99,
+  "description": "Limited Time Offer - 50% Off!"
+}
+
+### Delete Product
+DELETE {{baseUrl}}/products/{{productId}}
+
+###############################################
+# Reservations
+###############################################
+
+### Reserve Products (Single Item)
+POST {{baseUrl}}/reservations
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "items": [
+    {
+      "productId": "{{productId}}",
+      "sku": "IPHONE15PROMAX",
+      "quantity": 2
+    }
+  ]
+}
+
+### Reserve Multiple Products (Bonus Feature)
+POST {{baseUrl}}/reservations
+Content-Type: application/json
+
+{
+  "userId": "user456",
+  "items": [
+    {
+      "productId": "{{productId}}",
+      "sku": "IPHONE15PROMAX",
+      "quantity": 1
+    },
+    {
+      "productId": "ANOTHER_PRODUCT_ID",
+      "sku": "MACBOOKPRO",
+      "quantity": 1
+    }
+  ]
+}
+
+### Get User Reservation
+GET {{baseUrl}}/reservations/{{userId}}
+
+### Cancel Reservation
+POST {{baseUrl}}/reservations/cancel
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}"
+}
+
+### Get Reservation by ID
+GET {{baseUrl}}/reservations/detail/{{reservationId}}
+
+###############################################
+# Checkout & Orders
+###############################################
+
+### Checkout (Complete Purchase)
+POST {{baseUrl}}/checkout
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}"
+}
+
+### Get Order by ID
+GET {{baseUrl}}/checkout/orders/{{orderId}}
+
+### Get User Orders
+GET {{baseUrl}}/checkout/user/{{userId}}/orders
+
+### Get All Orders (Admin)
+GET {{baseUrl}}/checkout/orders
+
+### Cancel Order
+POST {{baseUrl}}/checkout/orders/{{orderId}}/cancel
+
+###############################################
+# Test Scenarios
+###############################################
+
+### Test: Overselling Prevention (Should Fail)
+POST {{baseUrl}}/reservations
+Content-Type: application/json
+
+{
+  "userId": "oversell_test",
+  "items": [
+    {
+      "productId": "{{productId}}",
+      "sku": "IPHONE15PROMAX",
+      "quantity": 10000
+    }
+  ]
+}
+
+### Test: Duplicate Reservation (Should Fail)
+POST {{baseUrl}}/reservations
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "items": [
+    {
+      "productId": "{{productId}}",
+      "sku": "IPHONE15PROMAX",
+      "quantity": 1
+    }
+  ]
+}
+
+### Test: Checkout Without Reservation (Should Fail)
+POST {{baseUrl}}/checkout
+Content-Type: application/json
+
+{
+  "userId": "nonexistent_user"
+}
+
+###############################################
+# Concurrent Request Simulation
+###############################################
+
+### Concurrent User 1 - Reserve 5 items
+POST {{baseUrl}}/reservations
+Content-Type: application/json
+
+{
+  "userId": "concurrent_user_1",
+  "items": [
+    {
+      "productId": "{{productId}}",
+      "sku": "IPHONE15PROMAX",
+      "quantity": 5
+    }
+  ]
+}
+
+### Concurrent User 2 - Reserve 5 items (Run simultaneously)
+POST {{baseUrl}}/reservations
+Content-Type: application/json
+
+{
+  "userId": "concurrent_user_2",
+  "items": [
+    {
+      "productId": "{{productId}}",
+      "sku": "IPHONE15PROMAX",
+      "quantity": 5
+    }
+  ]
+}
+
+### Concurrent User 3 - Reserve 5 items (Run simultaneously)
+POST {{baseUrl}}/reservations
+Content-Type: application/json
+
+{
+  "userId": "concurrent_user_3",
+  "items": [
+    {
+      "productId": "{{productId}}",
+      "sku": "IPHONE15PROMAX",
+      "quantity": 5
+    }
+  ]
+}
