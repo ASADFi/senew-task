@@ -250,66 +250,7 @@ All errors follow this format:
 curl http://localhost:3000/api/health
 ```
 
-## Production Deployment
 
-1. **Set environment to production**
-```env
-NODE_ENV=production
-```
-
-2. **Use Docker Compose**
-```bash
-docker-compose up -d
-```
-
-3. **Enable monitoring** (recommended)
-- Add logging service (e.g., Winston + CloudWatch)
-- Add monitoring (e.g., Prometheus + Grafana)
-- Add error tracking (e.g., Sentry)
-
-4. **Security considerations**
-- Use strong MongoDB credentials
-- Enable Redis authentication
-- Use HTTPS/TLS in production
-- Implement JWT authentication
-- Add input sanitization
-
-## Troubleshooting
-
-### MongoDB Connection Issues
-```bash
-# Check if MongoDB is running
-mongosh --eval "db.version()"
-
-# Check connection string in .env
-# Ensure MongoDB is accessible on specified port
-```
-
-### Redis Connection Issues
-```bash
-# Check if Redis is running
-redis-cli ping
-
-# Should return: PONG
-```
-
-### Port Already in Use
-```bash
-lsof -i :3000
-kill -9 <PID>
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-
-ISC
 
 ## Support
 
